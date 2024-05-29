@@ -52,7 +52,7 @@ To get started with FitriVendorHub, follow these steps:
 
 We welcome contributions to FitriVendorHub! To get started, take a look at our contributing guidelines:
 
-[CONTRIBUTING.md](CONTRIBUTING.md)
+[CONTRIBUTING.md](CONTRIBUTING.md) 
 
 ## License
 
