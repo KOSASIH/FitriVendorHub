@@ -29,21 +29,32 @@ def get_leaderboard_entries():
     leaderboard_entries = LeaderboardEntry.query.all()
     return jsonify([LeaderboardEntrySchema().dump(leaderboard_entry) for leaderboard_entry in leaderboard_entries])
 
-@api.route('/award_badge', methods=['POST'])
-def award_badge_endpoint():
-    data = request.get_json()
-    user_id = data['user_id']
-    badge_id = data['badge_id']
-    # Call celery task
-    update_leaderboard.delay(badge_id, user_id)
-    return jsonify({"message": "Badge awarded successfully"})
+@api.route('/users/<int:user_id>/achievements', methods=['GET'])
+def get_user_achievements(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    achievements = user.achievements
+    return jsonify([AchievementSchema().dump(achievement) for achievement in achievements])
 
-@api.route('/update_leaderboard', methods=['POST'])
-def update_leaderboard_endpoint():
-    data = request.get_json()
-    leaderboard_id = data['leaderboard_id']
-    user_id = data['user_id']
-    score = data['score']
-    # Call celery task
-    award_badge.delay(user_id, leaderboard_id)
-    return jsonify({"message": "Leaderboard updated successfully"})
+@api.route('/leaderboards/<int:leaderboard_id>/entries', methods=['GET'])
+def get_leaderboard_entries_by_leaderboard(leaderboard_id):
+    leaderboard = Leaderboard.query.get(leaderboard_id)
+    if not leaderboard:
+        return jsonify({'error': 'Leaderboard not found'}), 404
+    entries = leaderboard.entries
+    return jsonify([LeaderboardEntrySchema().dump(entry) for entry in entries])
+
+@api.route('/achievements/<int:achievement_id>', methods=['GET'])
+def get_achievement(achievement_id):
+    achievement = Achievement.query.get(achievement_id)
+    if not achievement:
+        return jsonify({'error': 'Achievement not found'}), 404
+    return jsonify(AchievementSchema().dump(achievement))
+
+@api.route('/leaderboard_entries/<int:leaderboard_entry_id>', methods=['GET'])
+def get_leaderboard_entry(leaderboard_entry_id):
+    leaderboard_entry = LeaderboardEntry.query.get(leaderboard_entry_id)
+    if not leaderboard_entry:
+        return jsonify({'error': 'Leaderboard entry not found'}), 404
+    return jsonify(LeaderboardEntrySchema().dump(leaderboard_entry))
