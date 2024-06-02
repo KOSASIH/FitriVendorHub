@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ vendor_performance.vendor }}</h1>
+  <p>Task Completion Rate: {{ vendor_performance.task_completion_rate }}%</p>
+  <p>Response Time: {{ vendor_performance.response_time }} minutes</p>
+  <p>Quality of Work: {{ vendor_performance.quality_of_work }}%</p>
+{% endblock %}
