@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ file.file }}</h1>
+  <p>Vendor: {{ file.vendor }}</p>
+  <p>Shared with: {{ file.shared_with.all|join:", " }}</p>
+{% endblock %}
