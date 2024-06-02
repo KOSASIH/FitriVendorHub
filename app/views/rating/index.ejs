@@ -1,0 +1,57 @@
+<!-- Rating List Page Template -->
+<div class="rating-list-container">
+  <h1>Rating List</h1>
+  <ul class="rating-list">
+    <% ratings.forEach(function(rating) { %>
+      <li>
+        <a href="/rating/<%= rating.id %>">
+          <%= rating.title %> (<%= rating.average_rating %>/5)
+        </a>
+      </li>
+    <% }); %>
+  </ul>
+  <div class="pagination">
+    <%= pagination_links %>
+  </div>
+</div>
+
+<script>
+  // Initialize rating list JavaScript
+  const ratingList = document.querySelector('.rating-list');
+  ratingList.addEventListener('click', function(event) {
+    if (event.target.tagName === 'A') {
+      event.preventDefault();
+      const ratingId = event.target.href.split('/').pop();
+      fetch(`/rating/${ratingId}`)
+       .then(response => response.json())
+       .then(data => {
+          // Update rating details page
+          const ratingDetailsContainer = document.querySelector('.rating-details-container');
+          ratingDetailsContainer.innerHTML = '';
+          ratingDetailsContainer.appendChild(createRatingDetailsElement(data));
+        })
+       .catch(error => console.error(error));
+    }
+  });
+
+  // Create rating details element
+  function createRatingDetailsElement(rating) {
+    const ratingDetailsElement = document.createElement('div');
+    ratingDetailsElement.className = 'rating-details';
+    ratingDetailsElement.innerHTML = `
+      <h2>${rating.title}</h2>
+      <p>Average Rating: ${rating.average_rating}/5</p>
+      <p>Reviews: ${rating.reviews.length}</p>
+      <ul class="review-list">
+        ${rating.reviews.map(review => `
+          <li>
+            <a href="/review/${review.id}">
+              ${review.title}
+            </a>
+          </li>
+        `).join('')}
+      </ul>
+    `;
+    return ratingDetailsElement;
+  }
+</script>
