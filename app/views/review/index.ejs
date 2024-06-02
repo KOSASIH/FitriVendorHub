@@ -1,0 +1,48 @@
+<!-- Review List Page Template -->
+<div class="review-list-container">
+  <h1>Review List</h1>
+  <ul class="review-list">
+    <% reviews.forEach(function(review) { %>
+      <li>
+        <a href="/review/<%= review.id %>">
+          <%= review.title %> (<%= review.rating %>/5)
+        </a>
+      </li>
+    <% }); %>
+  </ul>
+  <div class="pagination">
+    <%= pagination_links %>
+  </div>
+</div>
+
+<script>
+  // Initialize review list JavaScript
+  const reviewList = document.querySelector('.review-list');
+  reviewList.addEventListener('click', function(event) {
+    if (event.target.tagName === 'A') {
+      event.preventDefault();
+      const reviewId = event.target.href.split('/').pop();
+      fetch(`/review/${reviewId}`)
+       .then(response => response.json())
+       .then(data => {
+          // Update review details page
+          const reviewDetailsContainer = document.querySelector('.review-details-container');
+          reviewDetailsContainer.innerHTML = '';
+         reviewDetailsContainer.appendChild(createReviewDetailsElement(data));
+        })
+      .catch(error => console.error(error));
+    }
+  });
+
+  // Create review details element
+  function createReviewDetailsElement(review) {
+    const reviewDetailsElement = document.createElement('div');
+    reviewDetailsElement.className = 'eview-details';
+    reviewDetailsElement.innerHTML = `
+      <h2>${review.title}</h2>
+      <p>Rating: ${review.rating}/5</p>
+      <p>Review: ${review.text}</p>
+    `;
+    return reviewDetailsElement;
+  }
+</script>
