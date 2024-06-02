@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Vendor Performance List</h1>
+  <ul>
+    {% for vendor_performance in vendor_performances %}
+      <li><a href="{{ vendor_performance.get_absolute_url }}">{{ vendor_performance.vendor }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
