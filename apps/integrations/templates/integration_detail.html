@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ integration.tool }} - {{ integration.vendor }}</h1>
+  <p>API Key: {{ integration.api_key }}</p>
+  <p>API Secret: {{ integration.api_secret }}</p>
+{% endblock %}
