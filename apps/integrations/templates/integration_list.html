@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Integration List</h1>
+  <ul>
+    {% for integration in integrations %}
+      <li><a href="{{ integration.get_absolute_url }}">{{ integration.tool }} - {{ integration.vendor }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
