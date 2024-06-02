@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>File List</h1>
+  <ul>
+    {% for file in files %}
+      <li><a href="{{ file.get_absolute_url }}">{{ file.file }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
