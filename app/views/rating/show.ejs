@@ -1,0 +1,47 @@
+<!-- Rating Details Page Template -->
+<div class="rating-details-container">
+  <h1><%= rating.title %></h1>
+  <p>Average Rating: <%= rating.average_rating %>/5</p>
+  <p>Reviews: <%= rating.reviews.length %></p>
+  <ul class="review-list">
+    <% rating.reviews.forEach(function(review) { %>
+      <li>
+        <a href="/review/<%= review.id %>">
+          <%= review.title %>
+        </a>
+      </li>
+    <% }); %>
+  </ul>
+</div>
+
+<script>
+  // Initialize rating details JavaScript
+  const ratingDetailsContainer = document.querySelector('.rating-details-container');
+  ratingDetailsContainer.addEventListener('click', function(event) {
+    if (event.target.tagName === 'A' && event.target.href.includes('/review/')) {
+      event.preventDefault();
+      const reviewId = event.target.href.split('/').pop();
+      fetch(`/review/${reviewId}`)
+       .then(response => response.json())
+       .then(data => {
+          // Update review details page
+          const reviewDetailsContainer = document.querySelector('.review-details-container');
+          reviewDetailsContainer.innerHTML = '';
+          reviewDetailsContainer.appendChild(createReviewDetailsElement(data));
+        })
+       .catch(error => console.error(error));
+    }
+  });
+
+  // Create review details element
+  function createReviewDetailsElement(review) {
+    const reviewDetailsElement = document.createElement('div');
+    reviewDetailsElement.className = 'eview-details';
+    reviewDetailsElement.innerHTML = `
+      <h2>${review.title}</h2>
+      <p>Rating: ${review.rating}/5</p>
+      <p>Review: ${review.text}</p>
+    `;
+    return reviewDetailsElement;
+  }
+</script>
